@@ -1,0 +1,134 @@
+body {
+  margin: 0;
+  background-color: #0f172a;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  padding: 20px;
+}
+
+.system-title {
+  font-size: 18px;
+  font-weight: bold;
+  color: #38bdf8;
+  letter-spacing: 2px;
+  margin-bottom: 15px;
+  text-shadow: 0 0 10px rgba(56, 189, 248, 0.3);
+}
+
+/* 1/1 PICTURE FRAME CONTAINER */
+.picture-box {
+  width: 90vw;
+  max-width: 450px;
+  aspect-ratio: 1 / 1;
+  border: 3px solid #38bdf8;
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: #1e293b;
+  position: relative;
+  box-shadow: 0 10px 25px -5px rgba(56, 189, 248, 0.15);
+}
+
+.picture-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.room-label {
+  position: absolute;
+  bottom: 15px;
+  left: 15px;
+  background: rgba(15, 23, 42, 0.85);
+  border-left: 3px solid #38bdf8;
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 0 6px 6px 0;
+  letter-spacing: 0.5px;
+}
+
+/* Form Configuration & Layout Layout */
+.config-form {
+  margin-top: 20px;
+  width: 90vw;
+  max-width: 450px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: #1e293b;
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid #334155;
+}
+
+.dropdown-group {
+  display: flex;
+  gap: 10px;
+}
+
+.dropdown-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+#targetRoom:has(option[disabled]:checked):hover {
+    cursor: not-allowed !important;
+}
+
+label {
+  font-size: 11px;
+  color: #94a3b8;
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+select {
+  padding: 10px;
+  background: #0f172a;
+  border: 1px solid #334155;
+  color: white;
+  border-radius: 6px;
+  outline: none;
+  font-size: 14px;
+}
+
+select:focus {
+  border-color: #38bdf8;
+}
+
+button {
+  padding: 12px;
+  background: #38bdf8;
+  border: none;
+  color: #0f172a;
+  font-weight: 700;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.2s;
+}
+
+button:hover {
+  background: #7dd3fc;
+}
+
+/* Navigation Output Text Area */
+#path-output {
+  margin-top: 15px;
+  font-size: 14px;
+  color: #cbd5e1;
+  background: #0f172a;
+  padding: 12px;
+  border-radius: 6px;
+  border: 1px solid #334155;
+  line-height: 1.5;
+}

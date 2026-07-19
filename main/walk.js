@@ -1,19 +1,14 @@
-const fs = require('fs');
-const prompt = require('prompt-sync')();
+let fs;
+let prompt;
+
+if (typeof require !== 'undefined') {
+    fs = require('fs');
+    prompt = require('prompt-sync')();
+}
 
 const ACTION_NAMES = { u: 'Up', d: 'Down', l: 'Left', r: 'Right', f: 'Forward', b: 'Backward' };
 
-const campusMap = (() => {
-    try {
-        const fileData = fs.readFileSync('./js/graph.json', 'utf8');
-        return JSON.parse(fileData);
-    } catch (error) {
-        console.log("❌ Reading json file failed. " + error);
-        return {};
-    }
-})();
-
-function BFS(start, target) {
+function BFS(campusMap, start, target) {
     if (start === target) return [];
 
     // The queue stores the current room and the total path taken to reach it
@@ -46,8 +41,8 @@ function BFS(start, target) {
     return null; // Return null if there is no possible path
 }
 
-function find_path(start, target) {
-    const travelHistory = BFS(start, target);
+function find_path(campusMap, start, target) {
+    const travelHistory = BFS(campusMap, start, target);
 
     if (travelHistory) {
         const pathStrings = travelHistory.map(step => `(${ACTION_NAMES[step.action]}) ➔  ${step.room}`);
@@ -57,8 +52,24 @@ function find_path(start, target) {
     }
 }
 
-module.exports = { BFS }
+if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
+    // We are in Node.js environment
+    module.exports = { BFS };
+} else {
+    // We are in the Browser environment
+    window.BFS = BFS;
+}
 
-if (require.main === module){
-    find_path("fcr3", "audi");
+if (typeof require !== 'undefined' && require.main === module) {
+    const campusMap = (() => {
+        try {
+            const fileData = fs.readFileSync('./main/graph.json', 'utf8');
+            return JSON.parse(fileData);
+        } catch (error) {
+            console.log("❌ Reading json file failed. " + error);
+            return {};
+        }
+    })();
+
+    find_path(campusMap, "fcr3", "audi");
 }
