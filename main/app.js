@@ -1,4 +1,45 @@
 const ACTION_NAMES = { u: 'Up', d: 'Down', l: 'Left', r: 'Right', f: 'Forward', b: 'Backward' };
+const ROOM_NAMES = {
+    "main": "Main Lobby Entrance",
+
+    "main1": "Main Lobby - Floor 1",
+    "stair1-l": "Left Stairs - Floor 1",
+    "stair1-r": "Right Stairs - Floor 1",
+    "mcr1": "Male CR - Floor 1",
+    "fcr1": "Female CR - Floor 1",
+    "101": "CB 101 - Clinic",
+    "102": "CB 102 - Faculty",
+    "103": "CB 103 - Classroom",
+    "104": "CB 104 - Chemistry Lab",
+    "105": "CB 105 - Science Lab",
+    "106": "CB 106 - Classroom",
+    "107": "CB 107 - Classroom",
+    "admin": "Administration Office",
+
+    "main2": "Main Lobby - Floor 2",
+    "stair2-l": "Left Stairs - Floor 2",
+    "stair2-r": "Right Stairs - Floor 2",
+    "mcr2": "Male CR - Floor 2",
+    "fcr2": "Female CR - Floor 2",
+    "201": "CB 201 - Classroom",
+    "202": "CB 202 - Classroom",
+    "203": "CB 203 - Classroom",
+    "204": "CB 204 - Education Room",
+    "205": "CB 205 - Computer Lab 1",
+    "206": "CB 206 - Computer Lab 2",
+    "207": "CB 207 - Classroom",
+    "208": "CB 208 - Classroom",
+
+    "main3": "Main Lobby - Floor 3",
+    "stair3-l": "Left Stairs - Floor 3",
+    "stair3-r": "Right Stairs - Floor 3",
+    "mcr3": "Male CR - Floor 3",
+    "fcr3": "Female CR - Floor 3",
+    "mini": "Mini Hotel",
+    "lib": "Library",
+    "speech": "Speech Lab",
+    "audi": "Auditorium"
+};
 
 let allRooms = [];
 let campusMap = {};
@@ -10,25 +51,23 @@ function filterTargetDropdown() {
     const selectedStart = startSelect.value;
     const previousTargetValue = targetSelect.value;
 
-    targetSelect.innerHTML = ''; // Wipe out existing listings
+    targetSelect.innerHTML = ''; 
 
     allRooms.forEach(room => {
         const option = document.createElement('option');
         option.value = room;
-        option.textContent = room.toUpperCase();
+        // 🛠️ FIXED: Uses your beautiful descriptive room name dictionary mapping here
+        option.textContent = (ROOM_NAMES[room] || room.toUpperCase());
 
-        // If the room matches the starting room, grey/black it out and make it unclickable
         if (room === selectedStart) {
             option.disabled = true;
-            option.style.color = '#64748b'; // Dim color style for visibility
+            option.style.color = '#64748b'; 
         }
 
         targetSelect.appendChild(option);
     });
 
-    // Auto-adjust target if the previously selected target is now disabled
     if (previousTargetValue === selectedStart || !previousTargetValue) {
-        // Find the first available room that isn't the starting room
         const firstValidRoom = allRooms.find(room => room !== selectedStart);
         if (firstValidRoom) {
             targetSelect.value = firstValidRoom;
@@ -37,7 +76,6 @@ function filterTargetDropdown() {
         targetSelect.value = previousTargetValue;
     }
 
-    // Set initial image view to mirror selected start location
     updateImageViewer(selectedStart, selectedStart);
 }
 
@@ -52,7 +90,8 @@ function updateImageViewer(roomKey, direction) {
 
     imgElement.src = imagePath;
 
-    document.getElementById('room-name').innerText = `LOCATION: ${roomKey.toUpperCase()}`;
+    const readableName = ROOM_NAMES[roomKey] || roomKey.toUpperCase();
+    document.getElementById('room-name').innerText = `LOCATION: ${readableName}`;
 }
 
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
@@ -69,7 +108,7 @@ async function calculateRoute() {
         return;
     }
 
-    let pathString = start.toUpperCase();
+    let pathString = ROOM_NAMES[start] || start.toUpperCase();
     outputBox.innerHTML = `<strong>Shortest Route:</strong><br>${pathString}`;
 
     updateImageViewer(start, start);
@@ -77,12 +116,14 @@ async function calculateRoute() {
     for (const step of route) {
         await sleep(1000);
         
-        pathString += ` ${step.action} ➔ ${step.room.toUpperCase()}`;
-        outputBox.innerHTML = `<strong>Shortest Route:</strong><br>${pathString}`;
-        
         updateImageViewer(step.room, step.action);
+        
+        const nextRoomReadable = ROOM_NAMES[step.next] || step.next.toUpperCase();
+        pathString += ` ➔ ${nextRoomReadable}`;
+        outputBox.innerHTML = `<strong>Shortest Route:</strong><br>${pathString}`;
     }
 
+    await sleep(1000);
     updateImageViewer(target, target);
 }
 
@@ -99,8 +140,7 @@ window.addEventListener("DOMContentLoaded", async () => {
     campusMap = await (async () => {
         try {
             const response = await fetch('./graph.json');
-            const data = await response.json();
-            return data;
+            return await response.json();
         } catch (error) {
             console.log("❌ Reading json file failed. " + error);
             return {};
@@ -112,7 +152,8 @@ window.addEventListener("DOMContentLoaded", async () => {
     allRooms.forEach(room => {
         const option = document.createElement('option');
         option.value = room;
-        option.textContent = room.toUpperCase();
+        // 🛠️ FIXED: Displays custom map room titles inside the initialization loop box options
+        option.textContent = (ROOM_NAMES[room] || room.toUpperCase());
         startSelect.appendChild(option);
     });
 

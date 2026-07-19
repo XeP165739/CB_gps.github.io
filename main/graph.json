@@ -43,15 +43,15 @@
     ],
     "107": [
         {"106" : "l"},
-        {"faculty" : "r"}
+        {"admin" : "r"}
     ],
-    "faculty": [
+    "admin": [
         {"107" : "l"},
         {"mcr1" : "r"}
     ],
     "mcr1": [
         {"stair1-r" : "b"},
-        {"faculty" : "l"}
+        {"admin" : "l"}
     ],
     "stair1-r": [
         {"stair2-r" : "u"},

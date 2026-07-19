@@ -11,14 +11,12 @@ const ACTION_NAMES = { u: 'Up', d: 'Down', l: 'Left', r: 'Right', f: 'Forward', 
 function BFS(campusMap, start, target) {
     if (start === target) return [];
 
-    // The queue stores the current room and the total path taken to reach it
     const queue = [ { currentRoom: start, path: [] } ];
     const visited = new Set([start]);
 
     while (queue.length > 0) {
         const { currentRoom, path } = queue.shift();
 
-        // Fetch children/edges from the graph configuration
         const neighbors = campusMap[currentRoom] || [];
 
         for (const neighborObj of neighbors) {
@@ -26,11 +24,10 @@ function BFS(campusMap, start, target) {
             const actionTaken = neighborObj[nextRoom];
 
             if (!visited.has(nextRoom)) {
-                // Keep track of the room and the visual direction action used to get there
-                const newPath = [...path, { room: nextRoom, action: actionTaken }];
+                const newPath = [...path, { room: currentRoom, action: actionTaken, next: nextRoom }];
 
                 if (nextRoom === target) {
-                    return newPath; // Return immediately upon finding the target
+                    return newPath; 
                 }
 
                 visited.add(nextRoom);
@@ -38,14 +35,15 @@ function BFS(campusMap, start, target) {
             }
         }
     }
-    return null; // Return null if there is no possible path
+    return null; 
 }
 
 function find_path(campusMap, start, target) {
     const travelHistory = BFS(campusMap, start, target);
 
     if (travelHistory) {
-        const pathStrings = travelHistory.map(step => `(${ACTION_NAMES[step.action]}) ➔  ${step.room}`);
+        // 🛠️ Re-mapped to output: "CurrentRoom (Action) ➔ NextRoom" structure
+        const pathStrings = travelHistory.map(step => `➔  (${ACTION_NAMES[step.action]}) ➔  ${step.next}`);
         console.log(`Your Traveled Path: ${start} ` + pathStrings.join(" ") + "\n");
     } else {
         console.log(`❌ No path found between ${start} and ${target}.`);
@@ -71,5 +69,5 @@ if (typeof require !== 'undefined' && require.main === module) {
         }
     })();
 
-    find_path(campusMap, "fcr3", "audi");
+    find_path(campusMap, "101", "main");
 }
