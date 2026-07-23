@@ -73,7 +73,7 @@ function filterTargetDropdown() {
  */
 function updateImageViewer(roomKey, direction) {
     const imgElement = document.getElementById('nav-display');
-    const imagePath = `../School-GPS/${roomKey}/${direction}.jpeg`;
+    const imagePath = `./School-GPS/${roomKey}/${direction}.jpeg`;
     
     // Fallback: If a specific perspective asset fails to load, gracefully assign the global placeholder frame
     imgElement.onerror = () => {
