@@ -78,7 +78,7 @@ function updateImageViewer(roomKey, direction) {
     // Fallback: If a specific perspective asset fails to load, gracefully assign the global placeholder frame
     imgElement.onerror = () => {
         imgElement.onerror = null;
-        imgElement.src = 'https://github.com/XeP165739/CB_gps.github.io/tree/main/School-GPS/default/default.jpeg';
+        imgElement.src = './School-GPS/default/default.jpeg';
     };
 
     imgElement.src = imagePath;
